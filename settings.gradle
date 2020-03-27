@@ -1,0 +1,2 @@
+rootProject.name = 'tcc-demo'
+include 'eureka-server', 'locker-server', 'order-server','storage-server'

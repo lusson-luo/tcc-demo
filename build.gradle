@@ -1,0 +1,38 @@
+buildscript {
+    ext {
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+
+    }
+}
+// 所有模块/项目的通用配置
+allprojects {
+    group 'cc.shixicheng'
+    version '0.0.1-SNAPSHOT'
+
+}
+// 子模块/项目的统一配置
+subprojects {
+    apply plugin: 'java'
+
+    sourceCompatibility = '1.8'
+    targetCompatibility = 1.8
+
+    repositories {
+        mavenCentral()
+    }
+    ext {//依赖版本
+        springBootVersion = '2.2.6.RELEASE'
+    }
+    dependencies {
+        compileOnly 'org.projectlombok:lombok'
+        annotationProcessor 'org.projectlombok:lombok'
+        // 单元测试
+        testImplementation('org.springframework.boot:spring-boot-starter-test') {
+            exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+        }
+    }
+}
