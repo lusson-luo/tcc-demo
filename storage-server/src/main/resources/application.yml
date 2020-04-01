@@ -3,6 +3,11 @@ spring:
     name: storage-server
   pid:
     file: storage.pid
+  h2:
+    console:
+      enabled: true
+  datasource:
+    data: classpath:data.sql
 
 server:
   port: 8003
