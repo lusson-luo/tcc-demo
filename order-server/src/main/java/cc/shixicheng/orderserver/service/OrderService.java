@@ -4,10 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import java.io.FileOutputStream;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.locks.Lock;
 
 import cc.shixicheng.orderserver.model.EnterWarehouseForm;
 import cc.shixicheng.orderserver.model.LockerCell;
@@ -19,7 +17,7 @@ import cc.shixicheng.orderserver.repository.MaterialOrderRepository;
 public class OrderService {
 
     public static final AtomicInteger atomicInteger = new AtomicInteger();
-    public static final int COMMIT_THRESHOLD = 5;
+    public static final int RUN_THRESHOLD = 5;
     public static final String PRE_PUT = "putting";
     public static final String ALREADY_PUT = "PUT";
     public static final String SUCCESS = "success";
@@ -81,8 +79,8 @@ public class OrderService {
 
     @Async
     public void commitAgain(EnterWarehouseForm form) {
-        if (atomicInteger.incrementAndGet() > COMMIT_THRESHOLD) {
-            if (atomicInteger.incrementAndGet() > COMMIT_THRESHOLD) {
+        if (atomicInteger.incrementAndGet() > RUN_THRESHOLD) {
+            if (atomicInteger.incrementAndGet() > RUN_THRESHOLD) {
                 System.out.println("commit失败，请人工处理，orderNo:" + form.getOrderNo());
                 return;
             }
@@ -115,6 +113,13 @@ public class OrderService {
     //重复执行的cancel
     @Async
     public void cancelAgain(EnterWarehouseForm form) {
-
+        if (atomicInteger.incrementAndGet() > RUN_THRESHOLD) {
+            if (atomicInteger.incrementAndGet() > RUN_THRESHOLD) {
+                System.out.println("cancel失败，请人工处理，orderNo:" + form.getOrderNo());
+                return;
+            }
+            cancel(form);
+            return;
+        }
     }
 }

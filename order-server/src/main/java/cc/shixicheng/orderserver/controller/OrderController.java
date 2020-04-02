@@ -23,21 +23,15 @@ public class OrderController {
 
     @GetMapping("/commit")
     public String commit() {
-        String orderNo = "001";
-        String lockerCode = "0100001";
-        String cellCode="A01";
-
-        EnterWarehouseForm form = new EnterWarehouseForm(orderNo, lockerCode, cellCode, "sn20200401-08G");
+        EnterWarehouseForm form = new EnterWarehouseForm("001", "0100001", "A01", "sn20200401-08G");
         orderService.enterWarehouse(form);
         return "commit success";
     }
 
     @GetMapping("/cancel")
     public String cancel() {
-        String orderNo = "001";
-        String lockerCode = "0100002";
-        String cellCode="A01";
-        orderService.enterWarehouse(orderNo, lockerCode, cellCode);
+        EnterWarehouseForm form = new EnterWarehouseForm("001", "0100002", "A01", "sn20200401-08G");
+        orderService.enterWarehouse(form);
         return "cancel success";
     }
 }
