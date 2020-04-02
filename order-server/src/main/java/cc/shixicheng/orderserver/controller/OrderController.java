@@ -24,14 +24,12 @@ public class OrderController {
     @GetMapping("/commit")
     public String commit() {
         EnterWarehouseForm form = new EnterWarehouseForm("001", "0100001", "A01", "sn20200401-08G");
-        orderService.enterWarehouse(form);
-        return "commit success";
+        return orderService.enterWarehouse(form);
     }
 
     @GetMapping("/cancel")
     public String cancel() {
         EnterWarehouseForm form = new EnterWarehouseForm("001", "0100002", "A01", "sn20200401-08G");
-        orderService.enterWarehouse(form);
-        return "cancel success";
+        return orderService.enterWarehouse(form);
     }
 }

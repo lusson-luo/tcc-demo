@@ -22,7 +22,7 @@ public class StorageService {
             return FAILED;
         }
         storage = storageOptional.get();
-        if (storage.getUsableInventory() != null || storage.getUsableInventory() == 0) {
+        if (storage.getUsableInventory() != null && storage.getUsableInventory() == 0) {
             return FAILED;
         }
         storage.setLockedInventory(storage.getLockedInventory() == null ? 1 : storage.getLockedInventory() + 1);
@@ -44,7 +44,24 @@ public class StorageService {
         storage = storageOptional.get();
         storage.setLockedInventory(storage.getLockedInventory() - 1);
         storage.setInventory(storage.getInventory() + 1);
-        //实际应该加version字段来做乐观锁，不过是demo，取消了
+        // todo: 加version做乐观锁
+        try {
+            storageRepository.save(storage);
+            return SUCCESS;
+        } catch (Exception ex) {
+            return FAILED;
+        }
+    }
+
+    public String cancel(LockerStorage storage) {
+        Optional<LockerStorage> storageOptional = storageRepository.findByLockerCodeAndCellCodeAndSn(storage.getLockerCode(), storage.getCellCode(), storage.getSn());
+        if (!storageOptional.isPresent()) {
+            return FAILED;
+        }
+        storage = storageOptional.get();
+        storage.setLockedInventory(storage.getLockedInventory() - 1);
+        storage.setUsableInventory(storage.getUsableInventory() + 1);
+        // todo: 加version做乐观锁
         try {
             storageRepository.save(storage);
             return SUCCESS;

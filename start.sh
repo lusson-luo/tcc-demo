@@ -1,3 +1,4 @@
+# todo: 开启远程debug
 cd eureka-server
 gradle bootrun &
 cd ../locker-server

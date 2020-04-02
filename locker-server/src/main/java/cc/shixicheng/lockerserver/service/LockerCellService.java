@@ -39,6 +39,7 @@ public class LockerCellService {
         lockerCell.get().setPreStatus(null);
         lockerCell.get().setCellStatus("usable");
         try {
+            // todo: 应改为version的乐观锁
             lockerCellRepository.save(lockerCell.get());
             return SUCCESS;
         } catch (Exception ex) {
@@ -46,5 +47,18 @@ public class LockerCellService {
         }
     }
 
-
+    public String cancel(LockerCell cell) {
+        Optional<LockerCell> lockerCell = lockerCellRepository.findByLockerCodeAndCellCode(cell.getLockerCode(), cell.getCellCode());
+        if (!lockerCell.isPresent()) {
+            return FAILED;
+        }
+        lockerCell.get().setPreStatus(null);
+        try {
+            // todo: 应改为version的乐观锁
+            lockerCellRepository.save(lockerCell.get());
+            return SUCCESS;
+        } catch (Exception ex) {
+            return FAILED;
+        }
+    }
 }

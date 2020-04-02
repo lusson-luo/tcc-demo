@@ -31,9 +31,15 @@ public class StorageController {
         return storageService.tryPut(storage);
     }
 
+    // todo: 做幂等
     @PostMapping("/commit")
-    @ResponseBody
     public String commit(@RequestBody LockerStorage storage) {
         return storageService.commit(storage);
+    }
+
+    // todo: 做幂等接口
+    @PostMapping("/cancel")
+    public String cancel(@RequestBody LockerStorage storage) {
+        return storageService.cancel(storage);
     }
 }

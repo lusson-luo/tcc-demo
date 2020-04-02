@@ -7,16 +7,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import cc.shixicheng.orderserver.model.LockerCell;
 
-@FeignClient(value = "locker")
+@FeignClient(value = "locker-server")
 public interface LockerRemoteService {
 
-    @RequestMapping(value = "locker-server/try-put", method= RequestMethod.POST)
+    @RequestMapping(value = "try-put", method= RequestMethod.POST)
     String tryPut(@RequestBody LockerCell lockerCell);
 
-    @RequestMapping(value = "locker-server/commit", method= RequestMethod.POST)
+    @RequestMapping(value = "commit", method= RequestMethod.POST)
     String commit(@RequestBody LockerCell lockerCell);
 
-    @RequestMapping(value = "locker-server/cancel", method= RequestMethod.POST)
+    @RequestMapping(value = "cancel", method= RequestMethod.POST)
     String cancel(@RequestBody LockerCell lockerCell);
 
 }
