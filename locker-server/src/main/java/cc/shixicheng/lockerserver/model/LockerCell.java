@@ -1,5 +1,7 @@
 package cc.shixicheng.lockerserver.model;
 
+import org.springframework.data.annotation.Version;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -24,4 +26,7 @@ public class LockerCell {
     private String cellStatus;
     @Column(name = "pre_status")
     private String preStatus;
+    @Version
+    @Column(name = "version")
+    private int version;
 }

@@ -34,7 +34,7 @@ public class OrderService {
     private StorageRemoteService storageRemoteService;
 
     // todo: try执行的时，如果遇到部分服务没有执行成功，到cancel时，所有服务都会执行还原任务，就会导致没有执行try服务的也还原了，这个还原过程如果时 xx=xx-1这种类型，数据就会出错。
-    // 想到一种方式解决，cancel不能用xx=xx-1这种方式，只能通过不变的数据算出来，且这个事务执行，就会锁住这条记录，其他事务不能修改。
+    // 想到一种方式解决，cancel不能用xx=xx-1这种方式，只能通过不变的数据算出来，且这个事务执行，就会锁住这条记录，其他事务不能修改，设置handleOrder。
     public String enterWarehouse(EnterWarehouseForm form) {
         if (tryEnter(form)) {
             commit(form);
@@ -57,7 +57,7 @@ public class OrderService {
         orderRepository.save(order.get());
         try {
             LockerCell lockerCell = new LockerCell(0, form.getLockerCode(), form.getCellCode(), null, null);
-            LockerStorage storage = new LockerStorage(0, form.getLockerCode(), form.getCellCode(), form.getSn(), null, null, null);
+            LockerStorage storage = new LockerStorage(0, form.getLockerCode(), form.getCellCode(), form.getSn(), null, null, null, form.getOrderNo());
             String lockerRes = lockerRemoteService.tryPut(lockerCell);
             logger.info("locker远程执行结果：" + lockerRes);
             String storageRes = storageRemoteService.tryPut(storage);
@@ -83,7 +83,7 @@ public class OrderService {
 
         try {
             LockerCell lockerCell = new LockerCell(0, form.getLockerCode(), form.getCellCode(), null, null);
-            LockerStorage storage = new LockerStorage(0, form.getLockerCode(), form.getCellCode(), form.getSn(), null, null, null);
+            LockerStorage storage = new LockerStorage(0, form.getLockerCode(), form.getCellCode(), form.getSn(), null, null, null, form.getOrderNo());
             if (!SUCCESS.equals(lockerRemoteService.commit(lockerCell)) || !SUCCESS.equals(storageRemoteService.commit(storage))) {
                 commitAgain(form);
             }
@@ -115,7 +115,7 @@ public class OrderService {
         orderRepository.save(order.get());
         try {
             LockerCell lockerCell = new LockerCell(0, form.getLockerCode(), form.getCellCode(), null, null);
-            LockerStorage storage = new LockerStorage(0, form.getLockerCode(), form.getCellCode(), form.getSn(), null, null, null);
+            LockerStorage storage = new LockerStorage(0, form.getLockerCode(), form.getCellCode(), form.getSn(), null, null, null, form.getOrderNo());
             if (!SUCCESS.equals(lockerRemoteService.cancel(lockerCell)) || !SUCCESS.equals(storageRemoteService.cancel(storage))) {
                 cancelAgain(form);
             }

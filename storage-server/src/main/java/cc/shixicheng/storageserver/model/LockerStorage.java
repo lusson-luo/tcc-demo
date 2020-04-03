@@ -27,4 +27,10 @@ public class LockerStorage {
     private Integer lockedInventory;
     @Column(name = "usable_inventory")
     private Integer usableInventory;
+    @Column(name = "capacity")
+    private Integer capacity;
+    @Column(name = "version")
+    private Integer version;
+    @Column(name = "handle_order")
+    private String handleOrder;
 }

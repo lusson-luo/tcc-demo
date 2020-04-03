@@ -15,4 +15,5 @@ public class LockerStorage {
     private Integer inventory;
     private Integer lockedInventory;
     private Integer usableInventory;
+    private String handleOrder;
 }
