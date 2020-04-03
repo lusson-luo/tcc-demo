@@ -28,6 +28,7 @@ public interface LockerStorageRepository extends JpaRepository<LockerStorage, Lo
     @Modifying
     @Query("update locker_storage ls set ls.inventory = :#{#storage.inventory}, ls.lockedInventory = :#{#storage.lockedInventory}, " +
             "ls.usableInventory = :#{#storage.usableInventory}, ls.handleOrder = :#{#storage.handleOrder}, ls.version = :#{#storage.version} + 1 " +
-            "where ls.id = :#{#storage.id} and ls.version = :#{#storage.version} and ls.handleOrder is null")
+            "where ls.id = :#{#storage.id} and ls.version = :#{#storage.version} ")
     int updateAndLock(@Param(value = "storage") LockerStorage storage);
+
 }

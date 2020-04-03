@@ -53,7 +53,7 @@ public class OrderService {
             return false;
         }
         order.get().setPreStatus(PRE_PUT);
-        //实际应该加version字段来做乐观锁，不过是demo，取消了
+        //todo: 改乐观锁，且判断状态
         orderRepository.save(order.get());
         try {
             LockerCell lockerCell = new LockerCell(0, form.getLockerCode(), form.getCellCode(), null, null);

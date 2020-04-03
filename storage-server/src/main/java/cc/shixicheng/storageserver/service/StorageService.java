@@ -39,16 +39,15 @@ public class StorageService {
             log.error("storage try操作执行失败，storage被其他订单锁住，storage: " + storage.toString());
             return FAILED;
         }
-        storage.setLockedInventory(storage.getLockedInventory() == null ? 1 : storage.getLockedInventory() + 1);
-        storage.setUsableInventory(storage.getUsableInventory() == null ? 29 : storage.getUsableInventory() - 1);
+        storage.setLockedInventory(storage.getLockedInventory() + 1);
+        storage.setUsableInventory(storage.getUsableInventory() - 1);
         storage.setHandleOrder(storageForm.getHandleOrder());
         try {
-            int runState = storageRepository.updateAndLock(storage);
-            if (runState != 0) {
+            if (storageRepository.updateAndLock(storage) != 0) {
                 log.info("storage try操作修改数据成功");
                 return SUCCESS;
             }
-            log.error("storage try操作修改数据失败，查询条件不符合, storage参数: " + storage.toString()+"; runState " + runState);
+            log.error("storage try操作修改数据失败，查询条件不符合, storage参数: " + storage.toString());
             return FAILED;
         } catch (Exception ex) {
             log.error("storage try操作执行失败.", ex);
@@ -59,25 +58,23 @@ public class StorageService {
     public String commit(LockerStorage storageForm) {
         Optional<LockerStorage> storageOptional = storageRepository.findByLockerCodeAndCellCodeAndSn(storageForm.getLockerCode(), storageForm.getCellCode(), storageForm.getSn());
         if (!storageOptional.isPresent()) {
-            log.error("storage commit操作执行失败，未找到对应的storage，参数storageForm: "+storageForm.toString());
+            log.error("storage commit操作执行失败，未找到对应的storage，参数storageForm: " + storageForm.toString());
             return FAILED;
         }
-
         LockerStorage storage = storageOptional.get();
         if (!Objects.equals(storage.getHandleOrder(), storageForm.getHandleOrder())) {
-            log.error("storage commit操作执行失败，storage未被当前订单锁住，storage: "+storage.toString());
+            log.error("storage commit操作执行失败，storage未被当前订单锁住，storage: " + storage.toString());
             return FAILED;
         }
         storage.setLockedInventory(storage.getLockedInventory() - 1);
         storage.setInventory(storage.getInventory() + 1);
         storage.setHandleOrder(storageForm.getHandleOrder());
         try {
-            int runState = storageRepository.updateAndUnlock(storage);
-            if (runState != 0) {
+            if (storageRepository.updateAndUnlock(storage) != 0) {
                 log.info("storage commit操作修改数据成功");
                 return SUCCESS;
             }
-            log.error("storage commit操作修改数据失败，查询条件不符合, storage参数: " + storage.toString()+"; runState " + runState);
+            log.error("storage commit操作修改数据失败，查询条件不符合, storage参数: " + storage.toString());
             return FAILED;
         } catch (Exception ex) {
             log.error("storage commit操作执行失败.", ex);
@@ -88,24 +85,23 @@ public class StorageService {
     public String cancel(LockerStorage storageForm) {
         Optional<LockerStorage> storageOptional = storageRepository.findByLockerCodeAndCellCodeAndSn(storageForm.getLockerCode(), storageForm.getCellCode(), storageForm.getSn());
         if (!storageOptional.isPresent()) {
-            log.error("storage cancel操作执行失败，未找到对应的storage，参数storageForm: "+storageForm.toString());
+            log.error("storage cancel操作执行失败，未找到对应的storage，参数storageForm: " + storageForm.toString());
             return FAILED;
         }
         LockerStorage storage = storageOptional.get();
         if (!Objects.equals(storage.getHandleOrder(), storageForm.getHandleOrder())) {
-            log.error("storage cancel操作执行失败，storage未被当前订单锁住，storage: "+storage.toString());
+            log.error("storage cancel操作执行失败，storage未被当前订单锁住，storage: " + storage.toString());
             return FAILED;
         }
         storage.setLockedInventory(0);
         storage.setUsableInventory(storage.getCapacity() - storage.getInventory());
         storage.setHandleOrder(storageForm.getHandleOrder());
         try {
-            int runState = storageRepository.updateAndUnlock(storage);
-            if (runState != 0) {
+            if (storageRepository.updateAndUnlock(storage) != 0) {
                 log.info("storage cancel操作修改数据成功");
                 return SUCCESS;
             }
-            log.error("storage cancel操作修改数据失败，查询条件不符合, storage参数: " + storage.toString()+"; runState " + runState);
+            log.error("storage cancel操作修改数据失败，查询条件不符合, storage参数: " + storage.toString());
             return FAILED;
         } catch (Exception ex) {
             log.error("storage cancel操作执行失败.", ex);

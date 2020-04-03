@@ -40,7 +40,6 @@ public class StorageController {
     // todo: 做幂等接口
     @PostMapping("/cancel")
     public String cancel(@RequestBody LockerStorage storage) {
-//        return storageService.cancel(storage);
-        return "success";
+        return storageService.cancel(storage);
     }
 }

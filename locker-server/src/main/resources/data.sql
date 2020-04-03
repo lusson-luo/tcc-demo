@@ -1,2 +1,2 @@
-insert into locker_cell(locker_code, cell_code, cell_status, pre_status) values ('0100001', 'A01', 'usable', null);
-insert into locker_cell(locker_code, cell_code, cell_status, pre_status) values ('0100001', 'A02', 'usable', null);
+insert into locker_cell(locker_code, cell_code, cell_status, pre_status, version) values ('0100001', 'A01', 'usable', null, 0);
+insert into locker_cell(locker_code, cell_code, cell_status, pre_status, version) values ('0100001', 'A02', 'usable', null, 0);

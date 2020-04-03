@@ -28,5 +28,5 @@ public class LockerCell {
     private String preStatus;
     @Version
     @Column(name = "version")
-    private int version;
+    private int version = 0;
 }
