@@ -1,0 +1,1 @@
+insert into material_order(order_no, biz_type, sn, amount, order_status, pre_status) values ('001', 'put', 'sn20200401-08G', 1, null, null);

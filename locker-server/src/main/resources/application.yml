@@ -3,6 +3,11 @@ spring:
     name: locker-server
   pid:
     file: locker.pid
+  h2:
+    console:
+      enabled: true
+  datasource:
+    data: classpath:data.sql
 
 server:
   port: 8001
